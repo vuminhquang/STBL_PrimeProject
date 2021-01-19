@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AddinEngine;
 using WebApplication.Data;
 
 namespace WebApplication
@@ -55,6 +56,8 @@ namespace WebApplication
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
             });
+
+            Global.Configure(app, env);
         }
     }
 }

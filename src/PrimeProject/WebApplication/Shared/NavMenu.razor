@@ -1,5 +1,5 @@
 ﻿<div class="top-row pl-4 navbar navbar-dark">
-    <a class="navbar-brand" href="">WebApplication</a>
+    <a class="navbar-brand" href="">Prime Project</a>
     <button class="navbar-toggler" @onclick="ToggleNavMenu">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -33,5 +33,10 @@
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
+    }
+
+    void Change(object value, string name, string action)
+    {
+        // console.Log($"{name} item with index {value} {action}");
     }
 }
