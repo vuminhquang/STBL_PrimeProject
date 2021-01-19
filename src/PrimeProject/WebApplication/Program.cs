@@ -4,7 +4,10 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AddinEngine;
 
@@ -14,15 +17,23 @@ namespace WebApplication
     {
         public static void Main(string[] args)
         {
+            if (Program.InDocker)
+            {
+                AddinManager.AddinFolderPath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "/Addins";
+            }
+            // var currDirectory = Directory.GetCurrentDirectory();
+            
             CreateHostBuilder(args).Build().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Global.CreateHostBuilder(args)    
-        // Host.CreateDefaultBuilder(args)
+            Global.CreateHostBuilder(args)
+                // Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
                 });
+
+        private static bool InDocker { get { return Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true";} }
     }
 }
