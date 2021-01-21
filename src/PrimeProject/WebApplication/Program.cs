@@ -1,14 +1,9 @@
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
+using System.Net;
 using System.Reflection;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using AddinEngine;
 
 namespace WebApplication
@@ -17,11 +12,10 @@ namespace WebApplication
     {
         public static void Main(string[] args)
         {
-            if (Program.InDocker)
+            if (InDocker)
             {
                 AddinManager.AddinFolderPath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "/Addins";
             }
-            // var currDirectory = Directory.GetCurrentDirectory();
             
             CreateHostBuilder(args).Build().Run();
         }
@@ -32,8 +26,19 @@ namespace WebApplication
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    webBuilder.ConfigureKestrel((hostContext, opt) =>
+                    {
+                        if (hostContext.HostingEnvironment.IsDevelopment())
+                        {
+                            opt.Listen(IPAddress.Any, // <== FIX HERE
+                                5050, 
+                                listenOptions =>  { }
+                            );
+                        }
+                    });
+
                 });
 
-        private static bool InDocker { get { return Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true";} }
+        private static bool InDocker => Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true";
     }
 }

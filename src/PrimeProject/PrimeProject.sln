@@ -15,6 +15,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedClassy", "Engine\Shar
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotificationHub", "Addins\NotificationHub\NotificationHub.csproj", "{BAD319BB-BDB9-4A2C-81D5-7790A2C754B2}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BruteForcePrimeFinder", "Addins\BruteForcePrimeFinder\BruteForcePrimeFinder.csproj", "{8BF9AD87-53F8-48A3-A24F-AD8CCF87B702}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PrimeFinder", "PrimeFinder", "{CAD59597-0872-4226-9076-819773569057}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{4B30D3A6-5960-4206-8F4B-D2D5E4582BEB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +39,14 @@ Global
 		{BAD319BB-BDB9-4A2C-81D5-7790A2C754B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BAD319BB-BDB9-4A2C-81D5-7790A2C754B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BAD319BB-BDB9-4A2C-81D5-7790A2C754B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8BF9AD87-53F8-48A3-A24F-AD8CCF87B702}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BF9AD87-53F8-48A3-A24F-AD8CCF87B702}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BF9AD87-53F8-48A3-A24F-AD8CCF87B702}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8BF9AD87-53F8-48A3-A24F-AD8CCF87B702}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B30D3A6-5960-4206-8F4B-D2D5E4582BEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B30D3A6-5960-4206-8F4B-D2D5E4582BEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B30D3A6-5960-4206-8F4B-D2D5E4582BEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B30D3A6-5960-4206-8F4B-D2D5E4582BEB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -40,6 +54,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{121707BF-C880-4FFA-A4CC-993ABF0B01A0} = {F6ABDBA4-E4F3-41F0-A7B3-E071838F98E2}
 		{BAD319BB-BDB9-4A2C-81D5-7790A2C754B2} = {3F759FA7-D143-4842-AD81-6B7300AF5E2B}
+		{8BF9AD87-53F8-48A3-A24F-AD8CCF87B702} = {CAD59597-0872-4226-9076-819773569057}
+		{CAD59597-0872-4226-9076-819773569057} = {3F759FA7-D143-4842-AD81-6B7300AF5E2B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7FAF7BF7-3D39-4C68-AA7E-608FA80F9A98}

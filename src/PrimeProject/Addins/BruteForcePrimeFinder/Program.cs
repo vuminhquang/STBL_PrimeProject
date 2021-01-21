@@ -1,0 +1,148 @@
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
+using System.Text;
+using System.Threading.Tasks;
+using C5;
+
+namespace BruteForcePrimeFinder
+{
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            int[] PRIMES_UNDER = { 1000000, 10000000, 30000000, 60000000, 70000000, 80000000, 90000000, 100000000 };
+            Console.WriteLine(
+                $"{"--------------------",-20}{"--------------------",-20}{"--------------------",20}{"--------------------",20}");
+            Console.WriteLine($"{"Primes Under",-20}{"Total Primes",-20}{"Time Taken",20}{"Algorithm",20}");
+            Console.WriteLine(
+                $"{"--------------------",-20}{"--------------------",-20}{"--------------------",20}{"--------------------",20}");
+
+            var primeDictionary = new TreeDictionary<long,object>();
+            
+            var startTime = DateTime.Now;
+            var totalPrimes = FindPrimeUsingBruteForce(PRIMES_UNDER[2], primeDictionary);
+            var stopTime = DateTime.Now;
+            TimeSpan duration = stopTime - startTime;
+            
+            string findPrimeUsingBruteForce = $"{PRIMES_UNDER[2],-20}{totalPrimes,-20}{duration,20}{"Brute Force",20}";
+            Console.WriteLine(findPrimeUsingBruteForce);
+            
+            startTime = DateTime.Now;
+            totalPrimes = FindPrimeUsingBruteForce(PRIMES_UNDER[2], primeDictionary);
+            stopTime = DateTime.Now;
+            duration = stopTime - startTime;
+            findPrimeUsingBruteForce = $"{PRIMES_UNDER[2],-20}{totalPrimes,-20}{duration,20}{"Brute Force With Cache",20}";
+            Console.WriteLine(findPrimeUsingBruteForce);
+
+            startTime = DateTime.Now;
+            totalPrimes = FindPrimeUsingSieveOfAtkins(PRIMES_UNDER[2]);
+            stopTime = DateTime.Now;
+            duration = stopTime - startTime;
+            
+            string findPrimeUsingSieveOfAtkins = String.Format("{0,-20}{1,-20}{2,20}{3,20}", PRIMES_UNDER[2], totalPrimes, duration, "Atkins");
+            Console.WriteLine(findPrimeUsingSieveOfAtkins);
+
+        }
+
+        private static int FindPrimeUsingBruteForce(long topCandidate, TreeDictionary<long, object> primeDictionary)
+        {
+            int totalCount = 1;
+            for (long i = 3; i < topCandidate; i += 2)
+            {
+                var isPrime = IsPrime(i, primeDictionary);
+                if (isPrime)
+                {
+                    totalCount++;
+                }
+            }
+            return totalCount;
+        }
+
+        private static bool IsPrime(long i, TreeDictionary<long, object> primeDictionary)
+        {
+            // var number = new BigInteger(i);
+            if (primeDictionary.Find(ref i, out _))
+            {
+                return true;
+            }
+            var isPrime = true;
+
+            for (var j = 3; j * j <= i; j += 2)
+            {
+                if ((i % j) != 0) continue;
+                isPrime = false;
+                break;
+            }
+
+            if (isPrime)
+            {
+                primeDictionary.Add(i, null);
+            }
+
+            return isPrime;
+        }
+
+         private static int FindPrimeUsingSieveOfAtkins(int topCandidate = 1000000)
+        {
+            int totalCount = 0;
+
+            BitArray isPrime = new BitArray(topCandidate + 1);
+
+            int squareRoot = (int)Math.Sqrt(topCandidate);
+
+            int xSquare = 1, xStepsize = 3;
+
+            int ySquare = 1, yStepsize = 3;
+
+            int computedVal = 0;
+
+            for (int x = 1; x <= squareRoot; x++)
+            {
+                ySquare = 1;
+                yStepsize = 3;
+                for (int y = 1; y <= squareRoot; y++)
+                {
+                    computedVal = (xSquare << 2) + ySquare;
+
+                    if ((computedVal <= topCandidate) && (computedVal % 12 == 1 || computedVal % 12 == 5))
+                        isPrime[computedVal] = !isPrime[computedVal];
+
+                    computedVal -= xSquare;
+                    if ((computedVal <= topCandidate) && (computedVal % 12 == 7))
+                        isPrime[computedVal] = !isPrime[computedVal];
+
+                    if (x > y)
+                    {
+                        computedVal -= ySquare << 1;
+                        if ((computedVal <= topCandidate) && (computedVal % 12 == 11))
+                            isPrime[computedVal] = !isPrime[computedVal];
+                    }
+                    ySquare += yStepsize;
+                    yStepsize += 2;
+                }
+                xSquare += xStepsize;
+                xStepsize += 2;
+            }
+
+            for (int n = 5; n <= squareRoot; n++)
+            {
+                if (isPrime[n] == true)
+                {
+                    int k = n * n;
+                    for (int z = k; z <= topCandidate; z += k)
+                        isPrime[z] = false;
+                }
+            }
+
+            for (int i = 1; i < topCandidate; i++)
+            {
+                if (isPrime[i]) totalCount++;
+            }
+            return (totalCount + 2); // 2 and 3 will be missed in Sieve Of Atkins
+        }
+
+    }
+}
