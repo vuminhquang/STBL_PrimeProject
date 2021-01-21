@@ -30,8 +30,8 @@ namespace WebApplication
                     {
                         if (hostContext.HostingEnvironment.IsDevelopment())
                         {
-                            opt.Listen(IPAddress.Any, // <== FIX HERE
-                                5050, 
+                            opt.Listen(IPAddress.Any,
+                                5051, 
                                 listenOptions =>  { }
                             );
                         }
