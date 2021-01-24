@@ -1,9 +1,14 @@
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using AddinEngine;
+using Hangfire;
+using Hangfire.Dashboard;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Filters;
 using WebApplication.Data;
 
 namespace WebApplication
@@ -49,6 +54,13 @@ namespace WebApplication
 
             app.UseMvcWithDefaultRoute();
 
+            app.UseHangfireDashboard("/jobs", new DashboardOptions
+            {
+                IsReadOnlyFunc = (DashboardContext context) => true,
+                Authorization = new []{new EveryoneAuthorizationFilter() }
+            });
+            app.UseHangfireServer();
+
             app.UseEndpoints(endpoints =>
             {
                 // endpoints.MapControllers();
@@ -57,6 +69,23 @@ namespace WebApplication
             });
 
             Global.Configure(app, env);
+        }
+    }
+
+    public class EveryoneAuthorizationFilter : IDashboardAuthorizationFilter
+    {
+        public bool Authorize(DashboardContext context)
+        {
+            return true;
+            // bool boolAuthorizeCurrentUserToAccessHangFireDashboard = false;
+            //
+            // if (HttpContext.Current.User.Identity.IsAuthenticated)
+            // {
+            //     if(HttpContext.Current.User.IsInRole("Account Administrator"))
+            //         boolAuthorizeCurrentUserToAccessHangFireDashboard = true;
+            // }
+            //
+            // return boolAuthorizeCurrentUserToAccessHangFireDashboard;
         }
     }
 }

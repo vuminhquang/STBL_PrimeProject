@@ -350,3 +350,5 @@ MigrationBackup/
 .ionide/
 
 src/PrimeProject/Compiled/
+
+src/PrimeProject/WebApplication/WorksEngineHangfire.db

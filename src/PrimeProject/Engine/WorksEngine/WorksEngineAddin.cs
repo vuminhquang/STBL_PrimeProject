@@ -3,6 +3,9 @@ using System.ComponentModel.Composition;
 using System.IO;
 using AddinEngine.Abstract;
 using AddInEngine.Abstract;
+using Hangfire;
+using Hangfire.Storage.SQLite;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -25,11 +28,11 @@ namespace WorksEngine
             var basePath = new FileInfo(location.AbsolutePath).Directory.FullName;
             // connectionString = connectionString.Replace("Filename=", $"Filename={Environment.CurrentDirectory}/");
             //"Filename=/DB/CoreEngine.DB"
-            connectionString = $"Filename={basePath}/DB/WorksEngineHangfire.db";
+            connectionString = $"WorksEngineHangfire.db";
 
-            // services.AddHangfire(
-            //     config => {  }//config.UseSQLiteStorage(connectionString)
-            // );
+            services.AddHangfire(
+                config => config.UseSQLiteStorage(connectionString)
+            );
             // services.AddHangfireServer();
             
         }
@@ -42,7 +45,8 @@ namespace WorksEngine
         //IWebConfigurationResolver
         public void SetUp(dynamic app, dynamic env)
         {
-            // app.UseHangfireDashboard();
+            var app2Setup = app as IApplicationBuilder;
+            app2Setup.UseResponseCompression();
         }
     }
 }
