@@ -11,40 +11,101 @@ namespace BruteForcePrimeFinder
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
-            int[] PRIMES_UNDER = { 1000000, 10000000, 30000000, 60000000, 70000000, 80000000, 90000000, 100000000 };
+            int[] PRIMES_UNDER = {1000000, 10000000, 30000000, 60000000, 70000000, 80000000, 90000000, 100000000};
             Console.WriteLine(
                 $"{"--------------------",-20}{"--------------------",-20}{"--------------------",20}{"--------------------",20}");
             Console.WriteLine($"{"Primes Under",-20}{"Total Primes",-20}{"Time Taken",20}{"Algorithm",20}");
             Console.WriteLine(
                 $"{"--------------------",-20}{"--------------------",-20}{"--------------------",20}{"--------------------",20}");
 
-            var primeDictionary = new TreeDictionary<long,object>();
-            
-            var startTime = DateTime.Now;
-            var totalPrimes = FindPrimeUsingBruteForce(PRIMES_UNDER[2], primeDictionary);
-            var stopTime = DateTime.Now;
-            TimeSpan duration = stopTime - startTime;
-            
-            string findPrimeUsingBruteForce = $"{PRIMES_UNDER[2],-20}{totalPrimes,-20}{duration,20}{"Brute Force",20}";
-            Console.WriteLine(findPrimeUsingBruteForce);
-            
+            var primeDictionary = new TreeDictionary<long, object>();
+
+            DateTime startTime;
+            int totalPrimes;
+            DateTime stopTime;
+            TimeSpan duration;
+
+            startTime = DateTime.Now;
+            totalPrimes = FindPrimeUsingSieveOfAtkins(int.MaxValue / 2);
+            stopTime = DateTime.Now;
+            duration = stopTime - startTime;
+            string findPrimeUsingSieveOfAtkins2 = String.Format("{0,-20}{1,-20}{2,20}{3,20}", PRIMES_UNDER[2],
+                totalPrimes, duration, "Atkins");
+            Console.WriteLine(findPrimeUsingSieveOfAtkins2);
+            return;
+
             startTime = DateTime.Now;
             totalPrimes = FindPrimeUsingBruteForce(PRIMES_UNDER[2], primeDictionary);
             stopTime = DateTime.Now;
             duration = stopTime - startTime;
-            findPrimeUsingBruteForce = $"{PRIMES_UNDER[2],-20}{totalPrimes,-20}{duration,20}{"Brute Force With Cache",20}";
+
+            string findPrimeUsingBruteForce = $"{PRIMES_UNDER[2],-20}{totalPrimes,-20}{duration,20}{"Brute Force",20}";
+            Console.WriteLine(findPrimeUsingBruteForce);
+
+            startTime = DateTime.Now;
+            totalPrimes = FindPrimeUsingBruteForce(PRIMES_UNDER[2], primeDictionary);
+            stopTime = DateTime.Now;
+            duration = stopTime - startTime;
+            findPrimeUsingBruteForce =
+                $"{PRIMES_UNDER[2],-20}{totalPrimes,-20}{duration,20}{"Brute Force With Cache",20}";
             Console.WriteLine(findPrimeUsingBruteForce);
 
             startTime = DateTime.Now;
             totalPrimes = FindPrimeUsingSieveOfAtkins(PRIMES_UNDER[2]);
             stopTime = DateTime.Now;
             duration = stopTime - startTime;
-            
-            string findPrimeUsingSieveOfAtkins = String.Format("{0,-20}{1,-20}{2,20}{3,20}", PRIMES_UNDER[2], totalPrimes, duration, "Atkins");
+            string findPrimeUsingSieveOfAtkins = String.Format("{0,-20}{1,-20}{2,20}{3,20}", PRIMES_UNDER[2],
+                totalPrimes, duration, "Atkins");
             Console.WriteLine(findPrimeUsingSieveOfAtkins);
 
+            startTime = DateTime.Now;
+            totalPrimes = await FindPrimeUsingRobinMillerTest((ulong) PRIMES_UNDER[2]);
+            stopTime = DateTime.Now;
+            duration = stopTime - startTime;
+            string findPrimeUsingRobinMillerTest = String.Format("{0,-20}{1,-20}{2,20}{3,20}", PRIMES_UNDER[2],
+                totalPrimes, duration, "RobinMiller");
+            Console.WriteLine(findPrimeUsingRobinMillerTest);
+
+            startTime = DateTime.Now;
+            totalPrimes = await FindPrimeUsingRobinMillerTest2((ulong) PRIMES_UNDER[2]);
+            stopTime = DateTime.Now;
+            duration = stopTime - startTime;
+            string findPrimeUsingRobinMillerTest2 = String.Format("{0,-20}{1,-20}{2,20}{3,20}", PRIMES_UNDER[2],
+                totalPrimes, duration, "RobinMiller2");
+            Console.WriteLine(findPrimeUsingRobinMillerTest2);
+        }
+
+        private static async Task<int> FindPrimeUsingRobinMillerTest(ulong topCandidate)
+        {
+            var totalCount = 1;
+            for (ulong i = 3; i < topCandidate; i += 2)
+            {
+                var isPrime = PrimeTests.IsPrime(i);
+                if (isPrime)
+                {
+                    totalCount++;
+                }
+            }
+
+            return totalCount;
+        }
+
+        private static async Task<int> FindPrimeUsingRobinMillerTest2(ulong topCandidate)
+        {
+            var totalCount = 1;
+            BigInteger top = new BigInteger(topCandidate);
+            for (BigInteger i = 3; i < top; i += 2)
+            {
+                var isPrime = i.IsPrime(25, out _);
+                if (isPrime)
+                {
+                    totalCount++;
+                }
+            }
+
+            return totalCount;
         }
 
         private static int FindPrimeUsingBruteForce(long topCandidate, TreeDictionary<long, object> primeDictionary)
@@ -58,6 +119,7 @@ namespace BruteForcePrimeFinder
                     totalCount++;
                 }
             }
+
             return totalCount;
         }
 
@@ -68,6 +130,7 @@ namespace BruteForcePrimeFinder
             {
                 return true;
             }
+
             var isPrime = true;
 
             for (var j = 3; j * j <= i; j += 2)
@@ -85,13 +148,13 @@ namespace BruteForcePrimeFinder
             return isPrime;
         }
 
-         private static int FindPrimeUsingSieveOfAtkins(int topCandidate = 1000000)
+        private static int FindPrimeUsingSieveOfAtkins(int topCandidate = 1000000)
         {
             int totalCount = 0;
 
             BitArray isPrime = new BitArray(topCandidate + 1);
 
-            int squareRoot = (int)Math.Sqrt(topCandidate);
+            int squareRoot = (int) Math.Sqrt(topCandidate);
 
             int xSquare = 1, xStepsize = 3;
 
@@ -120,9 +183,11 @@ namespace BruteForcePrimeFinder
                         if ((computedVal <= topCandidate) && (computedVal % 12 == 11))
                             isPrime[computedVal] = !isPrime[computedVal];
                     }
+
                     ySquare += yStepsize;
                     yStepsize += 2;
                 }
+
                 xSquare += xStepsize;
                 xStepsize += 2;
             }
@@ -141,6 +206,7 @@ namespace BruteForcePrimeFinder
             {
                 if (isPrime[i]) totalCount++;
             }
+
             return (totalCount + 2); // 2 and 3 will be missed in Sieve Of Atkins
         }
 

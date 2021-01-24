@@ -10,4 +10,8 @@
     <PackageReference Include="FastCollections" Version="0.2.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\PrimeFinderService\PrimeFinderService.csproj" />
+  </ItemGroup>
+
 </Project>
