@@ -1,0 +1,51 @@
+﻿@page "/addins/prime"
+
+@using System.Net.Http
+@using System.Numerics
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Routing
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.AspNetCore.Components.Web.Virtualization
+@using Microsoft.JSInterop
+@using PrimeFinderService.Services
+
+@inject PrimeFinder primeFinder
+
+<h1>Prime number</h1>
+
+<p>Please input number (as long as you want):</p>
+
+<p>
+    <textarea class="w-75" rows="5" value="@currentValue"
+           @onchange="@((ChangeEventArgs __e) => currentValue = __e.Value.ToString())">
+    </textarea>
+</p>
+
+<p>Nearest left Prime number is: @nearestNumber</p>
+<p>Accuracy: @accuracy %</p>
+<p hidden="@(!isCalculating)">Calculating..</p>
+
+<button class="btn btn-primary" @onclick="GetNearestLeftPrimary" disabled=@isCalculating>Click me</button>
+
+@code {
+    private BigInteger nearestNumber = 0;
+    private double accuracy = 0.0;
+    private string currentValue = "";
+    private bool isCalculating = false;
+
+    private void GetNearestLeftPrimary()
+    {
+        isCalculating = true;
+        if (!BigInteger.TryParse(currentValue, out var number))
+        {
+            isCalculating = false;
+            return;
+        }
+        var (n, a) = primeFinder.NearestLeftPrime(number);
+        nearestNumber = n;
+        accuracy = a * 100;
+        isCalculating = false;
+    }
+}

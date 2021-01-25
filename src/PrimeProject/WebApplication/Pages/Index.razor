@@ -1,0 +1,56 @@
+﻿@page "/"
+@using Radzen
+@using Microsoft.AspNetCore.Http.Extensions
+
+
+
+@inject NavigationManager NavigationManager
+
+<h1>Welcome to Prime Project!</h1>
+
+<div class="alert alert-secondary mt-4" role="alert">
+    <span class="oi oi-pencil mr-2" aria-hidden="true"></span>
+    <strong>Overview</strong>
+    <div>
+        This web application will takes in a number and returns the highest prime number lower than the input number.
+    </div>
+</div>
+
+
+Technical stuff
+<ul>
+    <li>
+        Performance: Choosing of algorithm
+    </li>
+    <li>
+        Maintainability: Addin-enabled system
+    </li>
+    <li>
+        Testing: Unit test with MsTest V2
+    </li>
+    <li>
+        Message between components example:
+        <ul>
+            <li>SignalR Notification Hub</li>
+            <li>Hangfire server to run scheduled tasks</li>
+            <li>Web API was used to provide result for other system, example:
+                <ul>
+                    <li>
+                        <a href="/api/PrimeNumber/NearestLeftPrime/99999">api/PrimeNumber/NearestLeftPrime/{number}</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+</ul>
+
+@* <SurveyPrompt Title="How is Blazor working for you?" /> *@
+
+<RadzenButton Text="Start" ButtonStyle="ButtonStyle.Primary" Click="@ButtonStart"></RadzenButton>
+
+@functions {
+    private void ButtonStart()
+    {
+        NavigationManager.NavigateTo("/addins/prime");
+    }
+}
