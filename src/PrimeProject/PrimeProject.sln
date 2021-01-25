@@ -31,6 +31,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PrimeFinderService", "Addin
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorksEngine", "Engine\WorksEngine\WorksEngine.csproj", "{26810176-875B-48A5-8378-86C0DAB72456}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrimeFinderServiceTests", "Addins\PrimeFinderServiceTests\PrimeFinderServiceTests.csproj", "{A6513896-7533-4AD6-A11E-C0D7B894B87F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -65,6 +67,10 @@ Global
 		{26810176-875B-48A5-8378-86C0DAB72456}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{26810176-875B-48A5-8378-86C0DAB72456}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{26810176-875B-48A5-8378-86C0DAB72456}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6513896-7533-4AD6-A11E-C0D7B894B87F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6513896-7533-4AD6-A11E-C0D7B894B87F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6513896-7533-4AD6-A11E-C0D7B894B87F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6513896-7533-4AD6-A11E-C0D7B894B87F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -77,6 +83,7 @@ Global
 		{CAD59597-0872-4226-9076-819773569057} = {3F759FA7-D143-4842-AD81-6B7300AF5E2B}
 		{4AC87BDC-C362-4A61-AC6C-23520CAA088D} = {CAD59597-0872-4226-9076-819773569057}
 		{26810176-875B-48A5-8378-86C0DAB72456} = {F6ABDBA4-E4F3-41F0-A7B3-E071838F98E2}
+		{A6513896-7533-4AD6-A11E-C0D7B894B87F} = {05E3D47E-CE47-4FC9-A1D5-5784E02AF365}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7FAF7BF7-3D39-4C68-AA7E-608FA80F9A98}

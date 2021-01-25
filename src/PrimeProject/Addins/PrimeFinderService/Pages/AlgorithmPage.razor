@@ -1,0 +1,46 @@
+﻿@page "/addins/algo"
+<h3>Algorithm Considering</h3>
+
+<h4>Problem</h4>
+Prime Number finding is an important problem to solve when creating a Blockchain framework:
+<ul>
+    <li>
+        While cryptography play the central role of the framework, some algorithms such as RSA or elliptic curve have prime numbers at their core.
+    </li>
+    <li>
+        To know if a small number is Prime Number or not is very easy. But if the number grow bigger, the problem will become NP.
+    </li>
+    <li>
+        This application try to provide a decent solution to generate Prime Number <b>productively</b>.
+    </li>
+</ul>
+
+<h4>
+    Solution
+</h4>
+<ol>
+    <li>
+        For the numbers equal or under: 1 billion (1.073.741.823)
+        <ul>
+            <li>
+                Pre-calculate using <b>Sieve of Atkin</b> when server starting
+            </li>
+            <li>
+                Save result as an Array of Bits, and cache it
+            </li>
+            <li>
+                Result in cache will be use when there are requests
+            </li>
+        </ul>
+    </li>
+    <li>
+        For the numbers greater:
+        <ul>
+            Using
+            <b>Miller-Rabin test</b> to calculate
+        </ul>
+        <ul>
+            The recurrent: 25 times
+        </ul>
+    </li>
+</ol>

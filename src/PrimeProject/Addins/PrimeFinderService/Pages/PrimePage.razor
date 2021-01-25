@@ -25,19 +25,27 @@
 
 <p>Nearest left Prime number is: @nearestNumber</p>
 <p>Accuracy: @accuracy %</p>
+<p hidden="@(!isCalculating)">Calculating..</p>
 
-<button class="btn btn-primary" @onclick="GetNearestLeftPrimary">Click me</button>
+<button class="btn btn-primary" @onclick="GetNearestLeftPrimary" disabled=@isCalculating>Click me</button>
 
 @code {
     private BigInteger nearestNumber = 0;
     private double accuracy = 0.0;
     private string currentValue = "";
+    private bool isCalculating = false;
 
     private void GetNearestLeftPrimary()
     {
-        if(!BigInteger.TryParse(currentValue, out var number)) return;
+        isCalculating = true;
+        if (!BigInteger.TryParse(currentValue, out var number))
+        {
+            isCalculating = false;
+            return;
+        }
         var (n, a) = primeFinder.NearestLeftPrime(number);
         nearestNumber = n;
         accuracy = a * 100;
+        isCalculating = false;
     }
 }

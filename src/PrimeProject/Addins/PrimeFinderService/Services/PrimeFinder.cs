@@ -96,7 +96,7 @@ namespace PrimeFinderService.Services
             }
 
             //Use Miller-Rabin test
-            for (var i = number; i >= maxSmallNum; i--)
+            for (var i = number; i >= 3; i--)
             {
                 var (isPrime, accuracy) = IsPrime(i);
                 if (isPrime)
