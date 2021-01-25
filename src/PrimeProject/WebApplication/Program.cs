@@ -32,7 +32,7 @@ namespace WebApplication
                         if (hostContext.HostingEnvironment.IsDevelopment())
                         {
                             opt.Listen(IPAddress.Any,
-                                5051, 
+                                33000, 
                                 listenOptions =>  { }
                             );
                         }

@@ -5,9 +5,9 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS_1=https://+:5050;http://+:80
-      - ASPNETCORE_URLS=http://+:5051
+      - ASPNETCORE_URLS=http://+:33000
     ports:
-      - "5051:5051"
+      - "33000:33000"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
