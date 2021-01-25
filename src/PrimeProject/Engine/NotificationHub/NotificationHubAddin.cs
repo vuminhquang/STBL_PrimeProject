@@ -36,11 +36,6 @@ namespace NotificationHub
 
         public void SetUp(IConfigurationRegister app)
         {
-            // app.UseEndpoints(endpoints =>
-            // {
-            //     //SignalR
-            //     endpoints.MapHub<SignalRHub>("/signalr-hub");
-            // });
         }
 
         public void SetUp(dynamic app, dynamic env)

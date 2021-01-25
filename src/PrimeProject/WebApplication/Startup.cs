@@ -64,7 +64,6 @@ namespace WebApplication
 
             app.UseEndpoints(endpoints =>
             {
-                // endpoints.MapControllers();
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
             });
@@ -78,15 +77,6 @@ namespace WebApplication
         public bool Authorize(DashboardContext context)
         {
             return true;
-            // bool boolAuthorizeCurrentUserToAccessHangFireDashboard = false;
-            //
-            // if (HttpContext.Current.User.Identity.IsAuthenticated)
-            // {
-            //     if(HttpContext.Current.User.IsInRole("Account Administrator"))
-            //         boolAuthorizeCurrentUserToAccessHangFireDashboard = true;
-            // }
-            //
-            // return boolAuthorizeCurrentUserToAccessHangFireDashboard;
         }
     }
 }

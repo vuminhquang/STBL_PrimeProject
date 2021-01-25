@@ -1,7 +1,5 @@
 ﻿//see https://github.com/IOL0ol1/PrimalityTest/blob/master/PrimalityTest/Utils/BigIntegerEx.cs
 
-using System.Collections;
-
 namespace System.Numerics
 {
     /// <summary>
@@ -165,7 +163,5 @@ namespace System.Numerics
 
             return result;
         }
-
-        
     }
 }
