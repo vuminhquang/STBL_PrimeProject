@@ -22,10 +22,21 @@ namespace PrimeFinderService
     {
         public void SetUp(IDependencyRegister services, IConfiguration configuration)
         {
+            //Not do this twice
+            var tDescriptor = services.FirstOrDefault(s => s.ServiceType == typeof(PrimeFinderServiceAddin));
+            if(tDescriptor != null)
+                return;
+            services.AddSingleton<PrimeFinderServiceAddin>();
+
             var currAssembly = typeof(PrimeFinderServiceAddin).Assembly;
             foreach (var type in Helper.GetAllTypesThatImplementInterface<IDiscoverableMVC>(currAssembly))
             {
                 services.AddTransient(type);
+            }
+            // services.AddSingleton<IDiscoverableUI>(provider => new _discoveryUI());
+            foreach (var type in Helper.GetAllTypesThatImplementInterface<IDiscoverableUI>(currAssembly))
+            {
+                services.AddSingleton(provider => Activator.CreateInstance(type) as IDiscoverableUI);
             }
 
             var connectionString = configuration["CoreEngine:ConnectionString"];

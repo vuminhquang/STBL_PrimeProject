@@ -9,4 +9,7 @@ namespace PrimeFinderService
     public class _discovery : IDiscoverableMVC
     {
     }
+    public class _discoveryUI : IDiscoverableUI
+    {
+    }
 }

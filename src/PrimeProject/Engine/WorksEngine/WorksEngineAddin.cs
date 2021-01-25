@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.Composition;
 using System.IO;
+using System.Linq;
 using AddinEngine.Abstract;
 using AddInEngine.Abstract;
 using Hangfire;
@@ -20,6 +21,10 @@ namespace WorksEngine
         //IDependencyResolver
         public void SetUp(IDependencyRegister services, IConfiguration configuration)
         {
+            var tDescriptor = services.FirstOrDefault(s => s.ServiceType == typeof(WorksEngineAddin));
+            if(tDescriptor != null)
+                return;
+            services.AddSingleton<WorksEngineAddin>();
             // var connectionString = "";
             // var currAssembly = typeof(WorksEngineAddin).Assembly;
             // //Quick fix: sqlite cannot open DB
