@@ -17,21 +17,12 @@ namespace PrimeFinderService.Services
     {
         private static object @lock = new object();
         public const int MAX_NUM_TO_CALC_DIRECTLY = (int.MaxValue / 2);
+        public static bool _ready = false;
         private readonly IServiceProvider _services;
         private static BitArray _isPrime;
 
-        public static BitArray IsPrimeBitArray
-        {
-            get
-            {
-                lock (@lock)
-                {
-                    _isPrime ??= new BitArray(MAX_NUM_TO_CALC_DIRECTLY + 1);
-                }
-
-                return _isPrime;
-            }
-        }
+        public static BitArray IsPrimeBitArray => _isPrime;
+        public static bool Ready => _ready;
 
         public PrimeFinder(IServiceProvider services)
         {
@@ -133,6 +124,17 @@ namespace PrimeFinderService.Services
 
         private static int CachePrimesUsingSieveOfAtkins(int topCandidate = MAX_NUM_TO_CALC_DIRECTLY)
         {
+            //Only do once
+            lock (@lock)
+            {
+                if (_isPrime != null)
+                {
+                    return 0;
+                }
+
+                _isPrime = new BitArray(MAX_NUM_TO_CALC_DIRECTLY + 1);
+            }
+
             Console.WriteLine($"Begin cache, calc to {MAX_NUM_TO_CALC_DIRECTLY}");
             var totalCount = 0;
 
@@ -201,7 +203,7 @@ namespace PrimeFinderService.Services
             // context.SaveChanges();
 
             Console.WriteLine("Cache Small Primes done");
-
+            _ready = true;
             return (totalCount + 2); // 2 and 3 will be missed in Sieve Of Atkins
         }
     }
