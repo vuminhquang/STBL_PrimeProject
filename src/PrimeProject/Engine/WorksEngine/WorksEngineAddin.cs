@@ -4,6 +4,7 @@ using System.IO;
 using AddinEngine.Abstract;
 using AddInEngine.Abstract;
 using Hangfire;
+using Hangfire.Dashboard;
 using Hangfire.Storage.SQLite;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -19,22 +20,29 @@ namespace WorksEngine
         //IDependencyResolver
         public void SetUp(IDependencyRegister services, IConfiguration configuration)
         {
-            services.AddHostedService<WorksEngineService>();
-
-            var connectionString = "";
-            var currAssembly = typeof(WorksEngineAddin).Assembly;
-            //Quick fix: sqlite cannot open DB
-            var location = new Uri(currAssembly.Location);
-            var basePath = new FileInfo(location.AbsolutePath).Directory.FullName;
-            // connectionString = connectionString.Replace("Filename=", $"Filename={Environment.CurrentDirectory}/");
-            //"Filename=/DB/CoreEngine.DB"
-            connectionString = $"WorksEngineHangfire.db";
+            // var connectionString = "";
+            // var currAssembly = typeof(WorksEngineAddin).Assembly;
+            // //Quick fix: sqlite cannot open DB
+            // var location = new Uri(currAssembly.Location);
+            // var basePath = new FileInfo(location.AbsolutePath).Directory.FullName;
+            // // connectionString = connectionString.Replace("Filename=", $"Filename={Environment.CurrentDirectory}/");
+            // //"Filename=/DB/CoreEngine.DB"
+            // connectionString = $"WorksEngineHangfire.db";
+            //
+            // services.AddHangfire(
+            //     config => config.UseSQLiteStorage(connectionString)
+            // );
+            // services.AddHangfireServer();
+            
+            var connectionString = $"WorksEngineHangfire.db";
 
             services.AddHangfire(
                 config => config.UseSQLiteStorage(connectionString)
             );
-            // services.AddHangfireServer();
-            
+            JobStorage.Current = new SQLiteStorage(connectionString);
+
+            services.AddHostedService<WorksEngineService>();
+
         }
 
         //IConfigurationResolver
@@ -49,4 +57,6 @@ namespace WorksEngine
             app2Setup.UseResponseCompression();
         }
     }
+
+    
 }

@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using AddinEngine;
 using Hangfire;
 using Hangfire.Dashboard;
+using Hangfire.Storage.SQLite;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Filters;
 using WebApplication.Data;
@@ -50,16 +51,16 @@ namespace WebApplication
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
-            app.UseRouting();
-
-            app.UseMvcWithDefaultRoute();
-
             app.UseHangfireDashboard("/jobs", new DashboardOptions
             {
                 IsReadOnlyFunc = (DashboardContext context) => true,
                 Authorization = new []{new EveryoneAuthorizationFilter() }
             });
             app.UseHangfireServer();
+
+            app.UseRouting();
+
+            app.UseMvcWithDefaultRoute();
 
             app.UseEndpoints(endpoints =>
             {

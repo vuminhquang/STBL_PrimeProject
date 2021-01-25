@@ -2,6 +2,8 @@
 using System.Threading;
 using System.Threading.Tasks;
 using AddinEngine.Abstract;
+using Hangfire;
+using PrimeFinderService.Services;
 
 namespace WorksEngine
 {
@@ -20,10 +22,14 @@ namespace WorksEngine
             //
             // primeFinder.SeedData(1000000);
             // BackgroundJob.Enqueue(() => Console.WriteLine("Hello, world!"));
+
         }
 
         public override Task StartAsync(CancellationToken cancellationToken)
         {
+            BackgroundJob.Enqueue<PrimeFinder>(
+                primeFinder => primeFinder.SeedData(int.MaxValue/2)
+            );
             // _proxyService.Start();
             return base.StartAsync(cancellationToken);
         }
