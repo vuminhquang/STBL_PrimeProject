@@ -6,6 +6,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using C5;
+using PrimeFinderService.Services;
 
 namespace BruteForcePrimeFinder
 {
@@ -21,6 +22,7 @@ namespace BruteForcePrimeFinder
                 $"{"--------------------",-20}{"--------------------",-20}{"--------------------",20}{"--------------------",20}");
 
             var primeDictionary = new TreeDictionary<long, object>();
+            var topCandidates = int.MaxValue / 2;
 
             DateTime startTime;
             int totalPrimes;
@@ -28,14 +30,38 @@ namespace BruteForcePrimeFinder
             TimeSpan duration;
 
             startTime = DateTime.Now;
-            totalPrimes = FindPrimeUsingSieveOfAtkins(int.MaxValue / 2);
+            totalPrimes = FindPrimeUsingSieveOfAtkins(topCandidates);
             stopTime = DateTime.Now;
             duration = stopTime - startTime;
-            string findPrimeUsingSieveOfAtkins2 = String.Format("{0,-20}{1,-20}{2,20}{3,20}", PRIMES_UNDER[2],
+            string findPrimeUsingSieveOfAtkins2 = String.Format("{0,-20}{1,-20}{2,20}{3,20}", topCandidates,
                 totalPrimes, duration, "Atkins");
             Console.WriteLine(findPrimeUsingSieveOfAtkins2);
-            return;
+            
 
+            
+            var primeFinder = new PrimeFinder(null);
+            startTime = DateTime.Now;
+            totalPrimes = PrimeFinder.CacheSmallPrime();
+            stopTime = DateTime.Now;
+            duration = stopTime - startTime;
+            string findPrimeUsingSieveOfAtkins3 = String.Format("{0,-20}{1,-20}{2,20}{3,20}", topCandidates,
+                totalPrimes, duration, "PrimeFinderLibs");
+            Console.WriteLine(findPrimeUsingSieveOfAtkins3);
+
+            startTime = DateTime.Now;
+            totalPrimes = 0;
+            for (int i = 0; i <= topCandidates; i++)
+            {
+                if (primeFinder.IsPrime(i))
+                    totalPrimes++;
+            }
+            stopTime = DateTime.Now;
+            duration = stopTime - startTime;
+            string findPrimeUsingSieveOfAtkins4 = String.Format("{0,-20}{1,-20}{2,20}{3,20}", topCandidates,
+                totalPrimes, duration, "PrimeFinderLibsx2");
+            Console.WriteLine(findPrimeUsingSieveOfAtkins4);
+            return;
+            
             startTime = DateTime.Now;
             totalPrimes = FindPrimeUsingBruteForce(PRIMES_UNDER[2], primeDictionary);
             stopTime = DateTime.Now;

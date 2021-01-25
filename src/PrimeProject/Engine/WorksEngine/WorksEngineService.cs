@@ -27,9 +27,12 @@ namespace WorksEngine
 
         public override Task StartAsync(CancellationToken cancellationToken)
         {
-            BackgroundJob.Enqueue<PrimeFinder>(
-                primeFinder => primeFinder.SeedData(int.MaxValue/2)
+            BackgroundJob.Schedule(() =>
+                PrimeFinder.CacheSmallPrime(), TimeSpan.FromSeconds(10)
             );
+            // BackgroundJob.Enqueue<PrimeFinder>(
+            //     primeFinder => primeFinder.SeedData(int.MaxValue/2)
+            // );
             // _proxyService.Start();
             return base.StartAsync(cancellationToken);
         }

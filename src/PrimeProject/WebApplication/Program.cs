@@ -23,6 +23,7 @@ namespace WebApplication
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Global.CreateHostBuilder(args)
                 // Host.CreateDefaultBuilder(args)
+                // .UseContentRoot(Path.GetDirectoryName(typeof(Program).Assembly.Location))
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
@@ -37,7 +38,8 @@ namespace WebApplication
                         }
                     });
 
-                });
+                })
+        ;
 
         private static bool InDocker => Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true";
     }

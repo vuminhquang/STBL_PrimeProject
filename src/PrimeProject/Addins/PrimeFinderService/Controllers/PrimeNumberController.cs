@@ -27,17 +27,27 @@ namespace PrimeFinderService.Controllers
             return Ok("This is my default action...");
         }
 
-        [Route("IsPrime/{number}")]
-        public IActionResult IsPrime(string number)
+        // [Route("IsPrime/{number}")]
+        // public IActionResult IsPrime(string number)
+        // {
+        //     var response = "";
+        //     var num = BigInteger.Parse(number);
+        //     using (var context = _contextFactory.CreateDbContext())
+        //     {
+        //         var (isPrime, accuracy) = _primeFinder.IsPrime(num, context);
+        //         response = $"isPrime:{isPrime}, accuracy:{accuracy}";
+        //     }
+        //
+        //     return Ok(response);
+        // }
+
+        [Route("NearestLeftPrime/{number}")]
+        public IActionResult NearestLeftPrime(string number)
         {
             var response = "";
             var num = BigInteger.Parse(number);
-            using (var context = _contextFactory.CreateDbContext())
-            {
-                var (isPrime, accuracy) = _primeFinder.IsPrime(num, context);
-                response = $"isPrime:{isPrime}, accuracy:{accuracy}";
-            }
-
+            var (nearest, accuracy) = _primeFinder.NearestLeftPrime(num);
+            response = $"{{nearest:{nearest}, accuracy:{accuracy}}}";
             return Ok(response);
         }
     }

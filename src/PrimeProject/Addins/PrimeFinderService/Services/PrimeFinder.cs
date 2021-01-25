@@ -15,65 +15,128 @@ namespace PrimeFinderService.Services
 {
     public class PrimeFinder
     {
-        public const long MAX_NUM_TO_CALC_DIRECTLY = 1000000;
+        private static object @lock = new object();
+        public const int MAX_NUM_TO_CALC_DIRECTLY = (int.MaxValue / 2);
         private readonly IServiceProvider _services;
+        private static BitArray _isPrime;
+
+        public static BitArray IsPrimeBitArray
+        {
+            get
+            {
+                lock (@lock)
+                {
+                    _isPrime ??= new BitArray(MAX_NUM_TO_CALC_DIRECTLY + 1);
+                }
+
+                return _isPrime;
+            }
+        }
 
         public PrimeFinder(IServiceProvider services)
         {
             _services = services;
         }
 
-        public (bool IsPrime, double Accuracy) IsPrime(BigInteger number, PrimeServiceContext context, int recurring = 25)
+        public bool IsPrime(int number)
         {
-            var summary = context.Summaries.FirstOrDefault();
-            if (summary == null)
+            if (number < 1)
             {
-                summary = new Summary {MaximumNumberReached = 3};
-                context.Summaries.Add(summary);
-                context.SaveChanges();
+                return false;
             }
-            
-            var maxValue = summary.MaximumNumberReached;
+
+            return number <= 3 || IsPrimeBitArray[number];
+        }
+
+        private (bool IsPrime, double Accuracy) IsPrime(BigInteger number, int recurring = 25)
+        {
+            // var summary = context.Summaries.FirstOrDefault();
+            // if (summary == null)
+            // {
+            //     summary = new Summary {MaximumNumberReached = 3};
+            //     context.Summaries.Add(summary);
+            //     context.SaveChanges();
+            // }
+            //
+            // var maxValue = summary.MaximumNumberReached;
             // if (number < long.MaxValue)
 
-            if (number <= maxValue)
-            {
-                var longNum = (long) number;
-                var t = context.PrimeNumbers.FirstOrDefault(primeNumber => primeNumber.Number == longNum);
-                if (t==null)
-                {
-                    return (false, 1);
-                }
-                // var ret = 
-            }
 
             var isPrime = number.IsPrime(recurring, out var accuracy);
             return (isPrime, accuracy);
         }
 
-        public (BigInteger NearestLeftPrime, double Accouracy) NearestLeftPrime(BigInteger number, PrimeServiceContext context)
+        // public (BigInteger NearestLeftPrime, double Accouracy) NearestLeftPrime(string number)
+        // {
+        //     var bigInt = BigInteger.Parse(number);
+        //     return NearestLeftPrime(bigInt);
+        // }
+
+        public (BigInteger NearestLeftPrime, double Accouracy) NearestLeftPrime(BigInteger number)
         {
-            var longNum = (long) number;
-            var nearestLeftNumber = context.PrimeNumbers.Where(primeNumber => primeNumber.Number <= longNum).Max(num => num.Number);
+            // var longNum = (long) number;
+            // var nearestLeftNumber = context.PrimeNumbers.Where(primeNumber => primeNumber.Number <= longNum).Max(num => num.Number);
+            var maxSmallNum = MAX_NUM_TO_CALC_DIRECTLY;
+            
+            //Use cache
+            if (number < maxSmallNum)
+            {
+                var intNum = (int) number;
+
+                if (intNum < 1)
+                {
+                    return (0, 1);
+                }
+
+                if (intNum <=3)
+                {
+                    return (number, 1);
+                }
+
+                for (var i = intNum; i > 3; i--)
+                {
+                    if (IsPrime(i))
+                    {
+                        return (i, 1);
+                    }
+                }
+
+                return (3, 1);
+            }
+
+            //Use Miller-Rabin test
+            for (var i = number; i >= maxSmallNum; i--)
+            {
+                var (isPrime, accuracy) = IsPrime(i);
+                if (isPrime)
+                {
+                    return (i, accuracy);
+                }
+            }
 
             return (0, 1);
         }
 
         //Calc and put into DB for number in [from, to]
-        public void SeedData(long to = long.MaxValue)
+        // public void SeedData(long to = long.MaxValue)
+        // {
+        //     //if (to <= int.MaxValue) return;
+        //     var intTo = (int)to;
+        //     using var context = _services.GetService<IDbContextFactory<PrimeServiceContext>>().CreateDbContext();
+        //     FindPrimeUsingSieveOfAtkins(context, intTo);
+        // }
+
+        public static int CacheSmallPrime()
         {
-            //if (to <= int.MaxValue) return;
-            var intTo = (int)to;
-            using var context = _services.GetService<IDbContextFactory<PrimeServiceContext>>().CreateDbContext();
-            FindPrimeUsingSieveOfAtkins(context, intTo);
+            return CachePrimesUsingSieveOfAtkins();
         }
 
-        private static int FindPrimeUsingSieveOfAtkins(PrimeServiceContext context, int topCandidate = 1000000)
+        private static int CachePrimesUsingSieveOfAtkins(int topCandidate = MAX_NUM_TO_CALC_DIRECTLY)
         {
-            Console.WriteLine("Begin calc");
+            Console.WriteLine($"Begin cache, calc to {MAX_NUM_TO_CALC_DIRECTLY}");
             var totalCount = 0;
 
-            var isPrime = new BitArray(topCandidate + 1);
+            // var isPrime = new BitArray(topCandidate + 1);
 
             var squareRoot = (int) Math.Sqrt(topCandidate);
 
@@ -92,17 +155,17 @@ namespace PrimeFinderService.Services
                     computedVal = (xSquare << 2) + ySquare;
 
                     if ((computedVal <= topCandidate) && (computedVal % 12 == 1 || computedVal % 12 == 5))
-                        isPrime[computedVal] = !isPrime[computedVal];
+                        IsPrimeBitArray[computedVal] = !IsPrimeBitArray[computedVal];
 
                     computedVal -= xSquare;
                     if ((computedVal <= topCandidate) && (computedVal % 12 == 7))
-                        isPrime[computedVal] = !isPrime[computedVal];
+                        IsPrimeBitArray[computedVal] = !IsPrimeBitArray[computedVal];
 
                     if (x > y)
                     {
                         computedVal -= ySquare << 1;
                         if ((computedVal <= topCandidate) && (computedVal % 12 == 11))
-                            isPrime[computedVal] = !isPrime[computedVal];
+                            IsPrimeBitArray[computedVal] = !IsPrimeBitArray[computedVal];
                     }
 
                     ySquare += yStepsize;
@@ -115,27 +178,29 @@ namespace PrimeFinderService.Services
 
             for (var n = 5; n <= squareRoot; n++)
             {
-                if (isPrime[n] != true) continue;
+                if (IsPrimeBitArray[n] != true) continue;
                 var k = n * n;
                 for (var z = k; z <= topCandidate; z += k)
-                    isPrime[z] = false;
+                    IsPrimeBitArray[z] = false;
             }
 
             for (var i = 1; i < topCandidate; i++)
             {
-                if (!isPrime[i]) continue;
-                Console.WriteLine($"Prime number: {i}");
+                if (!IsPrimeBitArray[i]) continue;
+                // Console.WriteLine($"Prime number: {i}");
                 totalCount++;
-                //Update to DB
-                var primeNumber = new PrimeNumber
-                {
-                    Number = i
-                };
-                context.PrimeNumbers.Add(primeNumber);
+                // //Update to DB
+                // var primeNumber = new PrimeNumber
+                // {
+                //     Number = i
+                // };
+                // context.PrimeNumbers.Add(primeNumber);
             }
             //Update current top number calculated to DB
-            context.Summaries.First().MaximumNumberReached = topCandidate;
-            context.SaveChanges();
+            // context.Summaries.First().MaximumNumberReached = topCandidate;
+            // context.SaveChanges();
+
+            Console.WriteLine("Cache Small Primes done");
 
             return (totalCount + 2); // 2 and 3 will be missed in Sieve Of Atkins
         }
