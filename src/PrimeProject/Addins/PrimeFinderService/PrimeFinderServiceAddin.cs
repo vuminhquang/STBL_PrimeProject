@@ -3,7 +3,6 @@ using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
 using AddinEngine.Abstract;
-using AddInEngine.Abstract;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

@@ -1,11 +1,7 @@
-﻿using System;
-using System.ComponentModel.Composition;
-using System.IO;
+﻿using System.ComponentModel.Composition;
 using System.Linq;
 using AddinEngine.Abstract;
-using AddInEngine.Abstract;
 using Hangfire;
-using Hangfire.Dashboard;
 using Hangfire.Storage.SQLite;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;

@@ -68,7 +68,7 @@ namespace WebApplication
                 endpoints.MapFallbackToPage("/_Host");
             });
 
-            Global.Configure(app, env);
+            Global.Startup_Configure(app, env);
         }
     }
 

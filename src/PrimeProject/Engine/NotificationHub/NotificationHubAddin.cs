@@ -2,7 +2,6 @@
 using System.ComponentModel.Composition;
 using System.Linq;
 using AddinEngine.Abstract;
-using AddInEngine.Abstract;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
